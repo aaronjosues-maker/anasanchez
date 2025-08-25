@@ -1,390 +1,134 @@
-import { levels } from 'questions';
-import { playSound, playMusic, stopMusic } from 'audio';
+const menu = document.getElementById("menu");
+const game = document.getElementById("game");
+const alphabetSection = document.getElementById("alphabet");
+const numbersSection = document.getElementById("numbers");
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const alphabetContent = document.getElementById("alphabet-content");
+const numbersContent = document.getElementById("numbers-content");
 
-const gameContainer = document.getElementById('game-container');
+let currentLevel = "basic";
+let currentQuestion = {};
+let score = 0;
 
-let gameState = {
-    playerName: '',
-    playerGender: null, // 'boy' or 'girl'
-    coins: 0,
-    highestLevelUnlocked: 1,
-    completedLevels: [],
-    currentLevelId: null,
-    currentQuestionIndex: 0,
-    currentMistakes: 0,
-};
-
-function saveState() {
-    localStorage.setItem('mundodeletras_gamestate', JSON.stringify(gameState));
+function startGame(level) {
+  currentLevel = level;
+  menu.classList.add("hidden");
+  alphabetSection.classList.add("hidden");
+  numbersSection.classList.add("hidden");
+  game.classList.remove("hidden");
+  showQuestion();
 }
 
-function loadState() {
-    const savedState = localStorage.getItem('mundodeletras_gamestate');
-    if (savedState) {
-        // Merge saved state with default state to prevent errors if new properties are added
-        const loadedState = JSON.parse(savedState);
-        gameState = { ...gameState, ...loadedState };
-    }
+function showQuestion() {
+  const levelWords = words[currentLevel];
+  currentQuestion = levelWords[Math.floor(Math.random() * levelWords.length)];
+  questionEl.textContent = `Traduce: ${currentQuestion.word}`;
+
+  const options = [currentQuestion.translation];
+  while (options.length < 4) {
+    const randomWord = levelWords[Math.floor(Math.random() * levelWords.length)].translation;
+    if (!options.includes(randomWord)) options.push(randomWord);
+  }
+
+  options.sort(() => Math.random() - 0.5);
+
+  optionsEl.innerHTML = "";
+  options.forEach(option => {
+    const btn = document.createElement("div");
+    btn.textContent = option;
+    btn.classList.add("option");
+    btn.onclick = () => checkAnswer(option);
+    optionsEl.appendChild(btn);
+  });
 }
 
-function getAvatar() {
-    return gameState.playerGender === 'boy' ? 'batman_avatar.png' : 'peach_avatar.png';
+function checkAnswer(answer) {
+  if (answer === currentQuestion.translation) {
+    alert("✅ Correcto!");
+    score++;
+  } else {
+    alert(`❌ Incorrecto. La respuesta era: ${currentQuestion.translation}`);
+  }
+  showQuestion();
 }
 
-function renderStartScreen() {
-    gameContainer.innerHTML = `
-        <div id="start-screen" class="screen">
-            <h1>Mundo de Letras</h1>
-            <p>Escribe tu nombre para empezar tu aventura:</p>
-            <input type="text" id="player-name-input" class="pixel-input" placeholder="Tu nombre aquí..." autocomplete="off">
-            <p>Selecciona tu avatar:</p>
-            <div id="avatar-selection">
-                <div class="avatar-option" data-gender="boy">
-                    <img src="batman_avatar.png" alt="Avatar Niño">
-                    <span>Niño</span>
-                </div>
-                <div class="avatar-option" data-gender="girl">
-                    <img src="peach_avatar.png" alt="Avatar Niña">
-                    <span>Niña</span>
-                </div>
-            </div>
-            <button id="start-game-button" class="pixel-button disabled">Empezar</button>
-        </div>
-    `;
-
-    const startButton = document.getElementById('start-game-button');
-    const nameInput = document.getElementById('player-name-input');
-    const avatarOptions = document.querySelectorAll('.avatar-option');
-
-    function checkCanStart() {
-        const name = nameInput.value.trim();
-        const genderSelected = document.querySelector('.avatar-option.selected');
-        if (name.length > 0 && genderSelected) {
-            startButton.classList.remove('disabled');
-        } else {
-            startButton.classList.add('disabled');
-        }
-    }
-
-    avatarOptions.forEach(option => {
-        option.addEventListener('click', (e) => {
-            const currentOption = e.currentTarget;
-            playSound('click');
-            avatarOptions.forEach(opt => opt.classList.remove('selected'));
-            currentOption.classList.add('selected');
-            gameState.playerGender = currentOption.dataset.gender;
-            checkCanStart();
-        });
-    });
-
-    nameInput.addEventListener('input', checkCanStart);
-    nameInput.addEventListener('keyup', checkCanStart);
-
-    startButton.addEventListener('click', () => {
-        if (startButton.classList.contains('disabled')) return;
-
-        gameState.playerName = nameInput.value.trim();
-        saveState();
-        playSound('click');
-        playMusic('background');
-        renderLevelSelect();
-    });
+function returnToMenu() {
+  menu.classList.remove("hidden");
+  game.classList.add("hidden");
+  alphabetSection.classList.add("hidden");
+  numbersSection.classList.add("hidden");
 }
 
-function renderLevelSelect() {
-    const levelButtons = levels.map(level => {
-        const isUnlocked = level.id <= gameState.highestLevelUnlocked;
-        const isCompleted = gameState.completedLevels.includes(level.id);
-        let buttonClass = 'pixel-button';
-        if (!isUnlocked) buttonClass += ' disabled';
-        if (isCompleted) buttonClass += ' completed';
+// Mostrar Abecedario
+function showAlphabet() {
+  menu.classList.add("hidden");
+  alphabetSection.classList.remove("hidden");
+  numbersSection.classList.add("hidden");
+  game.classList.add("hidden");
 
-        return `
-            <div class="level-card">
-                 <button class="${buttonClass}" data-level-id="${level.id}">
-                    Nivel ${level.id}: ${level.name} ${isCompleted ? '✓' : ''}
-                </button>
-                ${!isUnlocked ? `
-                    <div class="lock-overlay">
-                        <span>🔒</span>
-                        <p>Completa el nivel anterior</p>
-                    </div>
-                ` : ''}
-            </div>
-        `;
-    }).join('');
+  const alphabet = [
+    { en: "A", es: "A" }, { en: "B", es: "Be" }, { en: "C", es: "Ce" },
+    { en: "D", es: "De" }, { en: "E", es: "E" }, { en: "F", es: "Efe" },
+    { en: "G", es: "Ge" }, { en: "H", es: "Hache" }, { en: "I", es: "I" },
+    { en: "J", es: "Jota" }, { en: "K", es: "Ka" }, { en: "L", es: "Ele" },
+    { en: "M", es: "Eme" }, { en: "N", es: "Ene" }, { en: "Ñ", es: "Eñe" },
+    { en: "O", es: "O" }, { en: "P", es: "Pe" }, { en: "Q", es: "Cu" },
+    { en: "R", es: "Erre" }, { en: "S", es: "Ese" }, { en: "T", es: "Te" },
+    { en: "U", es: "U" }, { en: "V", es: "Uve" }, { en: "W", es: "Doble U" },
+    { en: "X", es: "Equis" }, { en: "Y", es: "I griega" }, { en: "Z", es: "Zeta" }
+  ];
 
-    gameContainer.innerHTML = `
-        <div id="level-select-screen" class="screen">
-            <div id="player-info">
-                <div class="player-avatar">
-                    <img src="${getAvatar()}" alt="Player Avatar">
-                    <span>${gameState.playerName}</span>
-                </div>
-                <div class="coin-display">
-                    <img src="coin.png" alt="Moneda">
-                    <span id="coin-count">${gameState.coins}</span>
-                </div>
-            </div>
-            <h2>Selecciona un Nivel</h2>
-            <div id="level-select-grid">
-                ${levelButtons}
-            </div>
-             <div id="game-actions">
-                <button id="restart-game-btn" class="pixel-button">Reiniciar Juego</button>
-                <button id="exit-game-btn" class="pixel-button">Salir del Juego</button>
-            </div>
-        </div>
-    `;
-
-    document.querySelectorAll('.pixel-button[data-level-id]').forEach(button => {
-        if (!button.classList.contains('disabled')) {
-            button.addEventListener('click', () => {
-                const levelId = parseInt(button.dataset.levelId);
-                gameState.currentLevelId = levelId;
-                gameState.currentQuestionIndex = 0;
-                gameState.currentMistakes = 0; // Reset mistakes for the new level
-                playSound('click');
-                renderGameScreen();
-            });
-        }
-    });
-
-    document.getElementById('restart-game-btn').addEventListener('click', () => {
-        playSound('click');
-        if (confirm('¿Estás seguro de que quieres reiniciar todo tu progreso?')) {
-            localStorage.removeItem('mundodeletras_gamestate');
-            location.reload();
-        }
-    });
-
-    document.getElementById('exit-game-btn').addEventListener('click', () => {
-        playSound('click');
-        stopMusic();
-        gameContainer.innerHTML = `
-            <div class="screen">
-                <h1>¡Gracias por jugar!</h1>
-                <p>Puedes cerrar esta pestaña.</p>
-            </div>
-        `;
-        // Note: window.close() may not work in all browsers for security reasons.
-        // This provides a clear end-screen for the user.
-        try {
-            window.close();
-        } catch (e) {
-            console.log("window.close() no fue permitido por el navegador.");
-        }
-    });
+  alphabetContent.innerHTML = "";
+  alphabet.forEach(letter => {
+    alphabetContent.innerHTML += `
+      <div class="letter-card">
+        <span class="big">${letter.en}</span>
+        <span class="spanish-text">${letter.es}</span>
+      </div>`;
+  });
 }
 
-function renderGameScreen() {
-    const level = levels.find(l => l.id === gameState.currentLevelId);
-    if (!level) {
-        console.error("Level not found:", gameState.currentLevelId);
-        renderLevelSelect();
-        return;
+// Mostrar Números 1-100
+function showNumbers() {
+  menu.classList.add("hidden");
+  numbersSection.classList.remove("hidden");
+  alphabetSection.classList.add("hidden");
+  game.classList.add("hidden");
+
+  const numbers = {
+    1:{en:"One",es:"Uno"},2:{en:"Two",es:"Dos"},3:{en:"Three",es:"Tres"},
+    4:{en:"Four",es:"Cuatro"},5:{en:"Five",es:"Cinco"},6:{en:"Six",es:"Seis"},
+    7:{en:"Seven",es:"Siete"},8:{en:"Eight",es:"Ocho"},9:{en:"Nine",es:"Nueve"},
+    10:{en:"Ten",es:"Diez"},11:{en:"Eleven",es:"Once"},12:{en:"Twelve",es:"Doce"},
+    13:{en:"Thirteen",es:"Trece"},14:{en:"Fourteen",es:"Catorce"},15:{en:"Fifteen",es:"Quince"},
+    16:{en:"Sixteen",es:"Dieciséis"},17:{en:"Seventeen",es:"Diecisiete"},18:{en:"Eighteen",es:"Dieciocho"},
+    19:{en:"Nineteen",es:"Diecinueve"},20:{en:"Twenty",es:"Veinte"},
+    30:{en:"Thirty",es:"Treinta"},40:{en:"Forty",es:"Cuarenta"},
+    50:{en:"Fifty",es:"Cincuenta"},60:{en:"Sixty",es:"Sesenta"},
+    70:{en:"Seventy",es:"Setenta"},80:{en:"Eighty",es:"Ochenta"},
+    90:{en:"Ninety",es:"Noventa"},100:{en:"One hundred",es:"Cien"}
+  };
+
+  numbersContent.innerHTML = "";
+  for (let i = 1; i <= 100; i++) {
+    let en = "", es = "";
+
+    if (numbers[i]) {
+      en = numbers[i].en;
+      es = numbers[i].es;
+    } else if (i < 100) {
+      const tens = Math.floor(i / 10) * 10;
+      const ones = i % 10;
+      en = `${numbers[tens].en}-${numbers[ones].en}`;
+      es = `${numbers[tens].es} y ${numbers[ones].es}`;
     }
-    const question = level.questions[gameState.currentQuestionIndex];
-    if (!question) {
-        console.error("Question not found:", gameState.currentLevelId, gameState.currentQuestionIndex);
-        levelComplete(); // Probably finished the level
-        return;
-    }
-    const progress = ((gameState.currentQuestionIndex) / level.questions.length) * 100;
 
-    const optionsHtml = question.options.map((option, index) =>
-        `<button class="pixel-button option-button" data-option-index="${index}">${option}</button>`
-    ).join('');
-    
-    const livesHtml = '❤️'.repeat(3 - gameState.currentMistakes) + '🖤'.repeat(gameState.currentMistakes);
-
-    gameContainer.innerHTML = `
-        <div id="game-screen" class="screen">
-             <div id="player-info">
-                <div class="player-avatar">
-                    <img src="${getAvatar()}" alt="Player Avatar">
-                    <span>Nivel: ${level.name}</span>
-                </div>
-                 <div class="lives-display">
-                    Vidas: ${livesHtml}
-                </div>
-                <div class="coin-display">
-                    <img src="coin.png" alt="Moneda">
-                    <span id="coin-count">${gameState.coins}</span>
-                </div>
-            </div>
-            <div id="progress-bar-container"><div id="progress-bar" style="width: ${progress}%"></div></div>
-            <div id="question-container">
-                <p>${question.text}</p>
-            </div>
-            <div id="options-container">
-                ${optionsHtml}
-            </div>
-            <div id="feedback-container"></div>
-            <button id="back-to-levels" class="pixel-button hidden">Volver a Niveles</button>
-        </div>
-    `;
-
-    document.querySelectorAll('.option-button').forEach(button => {
-        button.addEventListener('click', (e) => {
-            checkAnswer(parseInt(e.target.dataset.optionIndex));
-        });
-    });
-    
-    document.getElementById('back-to-levels').addEventListener('click', () => {
-        playSound('click');
-        renderLevelSelect();
-    });
+    numbersContent.innerHTML += `
+      <div class="number-card">
+        <span class="big">${i}</span>
+        <span class="english-text">${en}</span>
+        <span class="spanish-text">${es}</span>
+      </div>`;
+  }
 }
-
-function checkAnswer(selectedIndex) {
-    const level = levels.find(l => l.id === gameState.currentLevelId);
-    const question = level.questions[gameState.currentQuestionIndex];
-    const feedbackContainer = document.getElementById('feedback-container');
-    
-    document.querySelectorAll('.option-button').forEach(b => b.classList.add('disabled'));
-
-    if (selectedIndex === question.correctAnswer) {
-        // Correct answer
-        gameState.coins += 10;
-        playSound('correct');
-        feedbackContainer.textContent = '¡Correcto! ¡+10 monedas!';
-        feedbackContainer.className = 'correct';
-    } else {
-        // Incorrect answer
-        gameState.currentMistakes++;
-        playSound('incorrect');
-        const correctOptionText = question.options[question.correctAnswer];
-        feedbackContainer.innerHTML = `¡Incorrecto! La respuesta correcta era: <br><strong>"${correctOptionText}"</strong>`;
-        feedbackContainer.className = 'incorrect';
-    }
-    
-    // Update UI for coins and lives
-    const coinCountEl = document.getElementById('coin-count');
-    if (coinCountEl) coinCountEl.textContent = gameState.coins;
-
-    const livesDisplayEl = document.querySelector('.lives-display');
-    if(livesDisplayEl) {
-        const livesHtml = '❤️'.repeat(3 - gameState.currentMistakes) + '🖤'.repeat(gameState.currentMistakes);
-        livesDisplayEl.innerHTML = `Vidas: ${livesHtml}`;
-    }
-
-    gameState.currentQuestionIndex++;
-    
-    setTimeout(() => {
-        if (gameState.currentMistakes >= 3) {
-            gameOver();
-            return;
-        }
-
-        if (gameState.currentQuestionIndex < level.questions.length) {
-            renderGameScreen();
-        } else {
-            levelComplete();
-        }
-    }, 2500);
-}
-
-function gameOver() {
-    playSound('incorrect');
-    gameContainer.innerHTML = `
-        <div id="game-over-screen" class="screen">
-            <h1>Fin del Juego</h1>
-            <p>¡Te has quedado sin vidas!</p>
-            <p>No te rindas, ¡inténtalo de nuevo!</p>
-            <div id="game-over-buttons">
-                 <button id="retry-level" class="pixel-button">Reintentar Nivel</button>
-                 <button id="return-to-menu" class="pixel-button">Volver a Niveles</button>
-            </div>
-        </div>
-    `;
-    
-    document.getElementById('retry-level').addEventListener('click', () => {
-        playSound('click');
-        gameState.currentQuestionIndex = 0;
-        gameState.currentMistakes = 0;
-        renderGameScreen();
-    });
-    
-    document.getElementById('return-to-menu').addEventListener('click', () => {
-        playSound('click');
-        renderLevelSelect();
-    });
-}
-
-function levelComplete() {
-    const currentLevelId = gameState.currentLevelId;
-    if (!gameState.completedLevels.includes(currentLevelId)) {
-        gameState.completedLevels.push(currentLevelId);
-    }
-    
-    // Unlock next level if this was the highest level completed
-    if (currentLevelId === gameState.highestLevelUnlocked && currentLevelId < levels.length) {
-        gameState.highestLevelUnlocked++;
-    }
-    
-    // Check if all levels are completed
-    if (gameState.completedLevels.length === levels.length) {
-        saveState();
-        setTimeout(renderGameCompleteScreen, 1500);
-        return;
-    }
-
-    const feedbackContainer = document.getElementById('feedback-container');
-    feedbackContainer.innerHTML = '<h2>¡Nivel Completado!</h2>';
-    feedbackContainer.className = 'correct';
-    
-    const optionsContainer = document.getElementById('options-container');
-    if (optionsContainer) optionsContainer.innerHTML = '';
-    
-    if (currentLevelId < levels.length) {
-         feedbackContainer.innerHTML += '<p>¡Has desbloqueado el siguiente nivel!</p>';
-    }
-
-    saveState();
-    const backButton = document.getElementById('back-to-levels');
-    if(backButton) backButton.classList.remove('hidden');
-}
-
-function renderGameCompleteScreen() {
-    gameContainer.innerHTML = `
-        <div id="game-complete-screen" class="screen">
-            <h1>¡FELICIDADES, ${gameState.playerName}!</h1>
-            <img src="celebration.png" alt="Celebración" id="celebration-img">
-            <h2>¡Has completado todos los niveles!</h2>
-            <p>¡Eres un maestro de las letras!</p>
-            <p>Monedas Finales: ${gameState.coins}</p>
-            <button id="restart-game" class="pixel-button">Jugar de Nuevo</button>
-        </div>
-    `;
-
-    document.getElementById('restart-game').addEventListener('click', () => {
-        playSound('click');
-        // Reset game state except for name and gender
-        const name = gameState.playerName;
-        const gender = gameState.playerGender;
-        gameState = {
-            playerName: name,
-            playerGender: gender,
-            coins: 0,
-            highestLevelUnlocked: 1,
-            completedLevels: [],
-            currentLevelId: null,
-            currentQuestionIndex: 0,
-            currentMistakes: 0,
-        };
-        saveState();
-        renderLevelSelect();
-    });
-}
-
-function init() {
-    loadState();
-    if (gameState.playerName && gameState.playerGender) {
-        renderLevelSelect();
-    } else {
-        renderStartScreen();
-    }
-}
-
-init();
