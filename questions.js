@@ -160,5 +160,97 @@ export const levels = [
             { text: "El conjunto de letras ordenadas de un idioma es el...", options: ["Diccionario", "Abecedario", "Párrafo", "Libro"], correctAnswer: 1 },
             { text: "¿Qué signo se usa para hacer una pregunta?", options: ["¡!", "...", "¿?", "."], correctAnswer: 2 }
         ]
+    },
+    {
+        id: 11,
+        name: "Signos de Puntuación",
+        unlockCost: 1000,
+        questions: [
+            { text: "¿Qué signo se usa al final de una oración que afirma algo?", options: ["Coma (,)", "Punto y coma (;)", "Punto (.)", "Dos puntos (:)"], correctAnswer: 2 },
+            { text: "Los signos que se usan para encerrar una aclaración son los...", options: ["Signos de interrogación (¿?)", "Paréntesis (())", "Comillas (\"\")", "Puntos suspensivos (...)"], correctAnswer: 1 },
+            { text: "¿Para qué se utiliza la coma (,)?", options: ["Para indicar el final de un texto", "Para hacer una pausa breve", "Para expresar sorpresa", "Para hacer una pregunta"], correctAnswer: 1 }
+        ]
+    },
+    {
+        id: 12,
+        name: "La Noticia",
+        unlockCost: 1100,
+        questions: [
+            { text: "¿Cuál es la parte de la noticia que resume lo más importante en una sola línea?", options: ["Cuerpo", "Foto", "Titular", "Fecha"], correctAnswer: 2 },
+            { text: "Una noticia debe ser, sobre todo...", options: ["Larga y detallada", "Ficticia y entretenida", "Objetiva y veraz", "Subjetiva y personal"], correctAnswer: 2 }
+        ]
+    },
+    {
+        id: 13,
+        name: "El Cuento de Misterio",
+        unlockCost: 1200,
+        questions: [
+            { text: "Un personaje que investiga y resuelve un crimen en un cuento es un...", options: ["Villano", "Testigo", "Detective", "Narrador"], correctAnswer: 2 },
+            { text: "El elemento principal de un cuento de misterio es...", options: ["El romance", "El humor", "La enseñanza", "El suspenso"], correctAnswer: 3 }
+        ]
+    },
+    {
+        id: 14,
+        name: "Palabras Homófonas",
+        unlockCost: 1300,
+        questions: [
+            { text: "Completa la oración: 'Fui a ____ la basura en el cesto.'", options: ["echar", "hechar"], correctAnswer: 0 },
+            { text: "Completa la oración: '¡___, qué dolor me di en el pie!'", options: ["ay", "hay", "ahí"], correctAnswer: 0 },
+            { text: "'Hola' (saludo) y 'ola' (del mar) son palabras...", options: ["Sinónimas", "Antónimas", "Homófonas", "Parónimas"], correctAnswer: 2 }
+        ]
+    },
+    {
+        id: 15,
+        name: "La Entrevista",
+        unlockCost: 1400,
+        questions: [
+            { text: "La persona que hace las preguntas en una entrevista es el...", options: ["Entrevistado", "Público", "Entrevistador", "Camarógrafo"], correctAnswer: 2 },
+            { text: "El propósito de una entrevista es...", options: ["Contar un chiste", "Vender un producto", "Obtener información", "Leer un poema"], correctAnswer: 2 }
+        ]
+    },
+    {
+        id: 16,
+        name: "Sujeto y Predicado",
+        unlockCost: 1500,
+        questions: [
+            { text: "En 'El gato negro duerme en el sofá', ¿cuál es el sujeto?", options: ["El gato negro", "duerme", "en el sofá", "negro"], correctAnswer: 0 },
+            { text: "¿Qué parte de la oración dice lo que hace el sujeto?", options: ["El adjetivo", "El verbo", "El predicado", "El artículo"], correctAnswer: 2 }
+        ]
+    },
+    {
+        id: 17,
+        name: "La Leyenda",
+        unlockCost: 1600,
+        questions: [
+            { text: "Una leyenda es una narración que mezcla hechos reales con...", options: ["Instrucciones", "Noticias", "Fantasía", "Recetas"], correctAnswer: 2 },
+            { text: "Las leyendas se transmiten principalmente de forma...", options: ["Escrita en libros", "Oral de generación en generación", "Por correo electrónico", "En películas"], correctAnswer: 1 }
+        ]
+    },
+    {
+        id: 18,
+        name: "Tiempos Verbales",
+        unlockCost: 1700,
+        questions: [
+            { text: "La acción del verbo 'Yo comí' está en tiempo...", options: ["Presente", "Futuro", "Pasado", "Infinitivo"], correctAnswer: 2 },
+            { text: "La oración 'Nosotros jugaremos mañana' está en tiempo...", options: ["Presente", "Futuro", "Pasado", "Gerundio"], correctAnswer: 1 }
+        ]
+    },
+    {
+        id: 19,
+        name: "Familias de Palabras",
+        unlockCost: 1800,
+        questions: [
+            { text: "¿Qué palabra pertenece a la familia de 'pan'?", options: ["Pantalón", "Panadero", "Pandereta", "Pantalla"], correctAnswer: 1 },
+            { text: "'Marino' y 'marea' son de la familia de la palabra...", options: ["Amar", "Martes", "Mar", "Amargo"], correctAnswer: 2 }
+        ]
+    },
+    {
+        id: 20,
+        name: "Gran Repaso Final",
+        unlockCost: 1900,
+        questions: [
+            { text: "La sílaba que se pronuncia con más fuerza en una palabra es la sílaba...", options: ["Átona", "Final", "Tónica", "Inicial"], correctAnswer: 2 },
+            { text: "¿Cuál de estas palabras es un verbo que indica una acción?", options: ["Casa", "Bonito", "Rápido", "Correr"], correctAnswer: 3 }
+        ]
     }
 ];

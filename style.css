@@ -17,8 +17,28 @@ body {
 
 #avatar-selection {
     display: flex;
+    justify-content: center;
     gap: 20px;
     margin-bottom: 20px;
+    width: 100%;
+}
+
+.avatar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar-group h3 {
+    margin-bottom: 5px;
+}
+
+.avatar-options-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .avatar-option {

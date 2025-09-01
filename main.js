@@ -5,7 +5,7 @@ const gameContainer = document.getElementById('game-container');
 
 let gameState = {
     playerName: '',
-    playerGender: null, // 'boy' or 'girl'
+    playerAvatar: null, // e.g., 'batman_avatar.png'
     coins: 0,
     highestLevelUnlocked: 1,
     completedLevels: [],
@@ -28,7 +28,7 @@ function loadState() {
 }
 
 function getAvatar() {
-    return gameState.playerGender === 'boy' ? 'batman_avatar.png' : 'peach_avatar.png';
+    return gameState.playerAvatar;
 }
 
 function renderStartScreen() {
@@ -39,13 +39,33 @@ function renderStartScreen() {
             <input type="text" id="player-name-input" class="pixel-input" placeholder="Tu nombre aquí..." autocomplete="off">
             <p>Selecciona tu avatar:</p>
             <div id="avatar-selection">
-                <div class="avatar-option" data-gender="boy">
-                    <img src="batman_avatar.png" alt="Avatar Niño">
-                    <span>Niño</span>
+                <div class="avatar-group">
+                    <h3>Niño</h3>
+                    <div class="avatar-options-container">
+                        <div class="avatar-option" data-avatar="batman_avatar.png">
+                            <img src="batman_avatar.png" alt="Avatar Batman">
+                        </div>
+                        <div class="avatar-option" data-avatar="spiderman_avatar.png">
+                            <img src="spiderman_avatar.png" alt="Avatar Spider-Man">
+                        </div>
+                        <div class="avatar-option" data-avatar="ironman_avatar.png">
+                            <img src="ironman_avatar.png" alt="Avatar Iron Man">
+                        </div>
+                    </div>
                 </div>
-                <div class="avatar-option" data-gender="girl">
-                    <img src="peach_avatar.png" alt="Avatar Niña">
-                    <span>Niña</span>
+                <div class="avatar-group">
+                    <h3>Niña</h3>
+                    <div class="avatar-options-container">
+                        <div class="avatar-option" data-avatar="peach_avatar.png">
+                            <img src="peach_avatar.png" alt="Avatar Peach">
+                        </div>
+                        <div class="avatar-option" data-avatar="wonderwoman_avatar.png">
+                            <img src="wonderwoman_avatar.png" alt="Avatar Wonder Woman">
+                        </div>
+                        <div class="avatar-option" data-avatar="butterfly_avatar.png">
+                            <img src="butterfly_avatar.png" alt="Avatar Mariposa">
+                        </div>
+                    </div>
                 </div>
             </div>
             <button id="start-game-button" class="pixel-button disabled">Empezar</button>
@@ -58,8 +78,8 @@ function renderStartScreen() {
 
     function checkCanStart() {
         const name = nameInput.value.trim();
-        const genderSelected = document.querySelector('.avatar-option.selected');
-        if (name.length > 0 && genderSelected) {
+        const avatarSelected = gameState.playerAvatar;
+        if (name.length > 0 && avatarSelected) {
             startButton.classList.remove('disabled');
         } else {
             startButton.classList.add('disabled');
@@ -72,7 +92,7 @@ function renderStartScreen() {
             playSound('click');
             avatarOptions.forEach(opt => opt.classList.remove('selected'));
             currentOption.classList.add('selected');
-            gameState.playerGender = currentOption.dataset.gender;
+            gameState.playerAvatar = currentOption.dataset.avatar;
             checkCanStart();
         });
     });
@@ -132,7 +152,7 @@ function renderLevelSelect() {
             </div>
              <div id="game-actions">
                 <button id="restart-game-btn" class="pixel-button">Reiniciar Juego</button>
-                <button id="exit-game-btn" class="pixel-button">Salir del Juego</button>
+                <button id="back-to-start-btn" class="pixel-button">Retroceder</button>
             </div>
         </div>
     `;
@@ -154,26 +174,15 @@ function renderLevelSelect() {
         playSound('click');
         if (confirm('¿Estás seguro de que quieres reiniciar todo tu progreso?')) {
             localStorage.removeItem('mundodeletras_gamestate');
+            stopMusic();
             location.reload();
         }
     });
 
-    document.getElementById('exit-game-btn').addEventListener('click', () => {
+    document.getElementById('back-to-start-btn').addEventListener('click', () => {
         playSound('click');
         stopMusic();
-        gameContainer.innerHTML = `
-            <div class="screen">
-                <h1>¡Gracias por jugar!</h1>
-                <p>Puedes cerrar esta pestaña.</p>
-            </div>
-        `;
-        // Note: window.close() may not work in all browsers for security reasons.
-        // This provides a clear end-screen for the user.
-        try {
-            window.close();
-        } catch (e) {
-            console.log("window.close() no fue permitido por el navegador.");
-        }
+        renderStartScreen();
     });
 }
 
@@ -221,7 +230,7 @@ function renderGameScreen() {
                 ${optionsHtml}
             </div>
             <div id="feedback-container"></div>
-            <button id="back-to-levels" class="pixel-button hidden">Volver a Niveles</button>
+            <button id="back-to-levels" class="pixel-button">Retroceder</button>
         </div>
     `;
 
@@ -360,12 +369,12 @@ function renderGameCompleteScreen() {
 
     document.getElementById('restart-game').addEventListener('click', () => {
         playSound('click');
-        // Reset game state except for name and gender
+        // Reset game state except for name and avatar
         const name = gameState.playerName;
-        const gender = gameState.playerGender;
+        const avatar = gameState.playerAvatar;
         gameState = {
             playerName: name,
-            playerGender: gender,
+            playerAvatar: avatar,
             coins: 0,
             highestLevelUnlocked: 1,
             completedLevels: [],
@@ -380,7 +389,7 @@ function renderGameCompleteScreen() {
 
 function init() {
     loadState();
-    if (gameState.playerName && gameState.playerGender) {
+    if (gameState.playerName && gameState.playerAvatar) {
         renderLevelSelect();
     } else {
         renderStartScreen();
