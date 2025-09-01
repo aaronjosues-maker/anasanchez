@@ -152,7 +152,7 @@ function renderLevelSelect() {
             </div>
              <div id="game-actions">
                 <button id="restart-game-btn" class="pixel-button">Reiniciar Juego</button>
-                <button id="back-to-start-btn" class="pixel-button">Retroceder</button>
+                <button id="back-to-start-btn" class="pixel-button">Salir</button>
             </div>
         </div>
     `;
@@ -230,7 +230,7 @@ function renderGameScreen() {
                 ${optionsHtml}
             </div>
             <div id="feedback-container"></div>
-            <button id="back-to-levels" class="pixel-button">Retroceder</button>
+            <button id="back-to-levels" class="pixel-button">Volver a Niveles</button>
         </div>
     `;
 
