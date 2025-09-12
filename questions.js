@@ -8,7 +8,7 @@ export const levels = [
         unlockCost: 0,
         questions: [
             {
-                text: "Que es la comunicacion?",
+                text: "¿Que es la comunicacion?",
                 options: ["Comer y dormir", "Jugar fútbol", "Enviar y recibir un mensaje", "Salir de paseo"],
                 correctAnswer: 2
             },
