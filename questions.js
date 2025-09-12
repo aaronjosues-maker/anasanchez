@@ -8,8 +8,8 @@ export const levels = [
         unlockCost: 0,
         questions: [
             {
-                text: "Quien envía el mensaje en un acto de comunicación es el...",
-                options: ["Receptor", "Canal", "Emisor", "Código"],
+                text: "Que es la comunicacion?",
+                options: ["Comer y dormir", "Jugar fútbol", "Pasear", "Enviar o recibir un mensaje"],
                 correctAnswer: 2
             },
             {
