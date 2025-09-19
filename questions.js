@@ -4,36 +4,36 @@
 export const levels = [
     {
         id: 1,
-        name: "La Comunicación",
+        name: "Selecciona la respuesta correcta",
         unlockCost: 0,
         questions: [
             {
-                text: "¿Que es la comunicacion?",
-                options: ["Comer y dormir", "Jugar fútbol", "Enviar y recibir un mensaje", "Salir de paseo"],
+                text: "¿De qué color es el cielo en un día soleado?",
+                options: ["Rojo", "Verde", "Azul", "Amarillo"],
                 correctAnswer: 2
             },
             {
-                text: "El medio por el cual se envía el mensaje (aire, papel, teléfono) se llama...",
-                options: ["Mensaje", "Canal", "Emisor", "Contexto"],
+                text: "¿Cuántas patas tiene un perro?",
+                options: ["Dos", "Cuatro", "Seis", "Ocho"],
                 correctAnswer: 1
             },
             {
-                text: "¿Qué palabra es SINÓNIMO de 'contento'?",
-                options: ["Triste", "Enojado", "Alegre", "Cansado"],
+                text: "¿Cuál es el número que viene después del 9?",
+                options: ["8", "11", "10", "7"],
                 correctAnswer: 2
             },
             {
-                text: "¿Qué palabra es ANTÓNIMO de 'grande'?",
-                options: ["Enorme", "Gigante", "Alto", "Pequeño"],
+                text: "¿Qué usamos para escribir en un cuaderno?",
+                options: ["Tigeras", "Regla", "Pincel", "Lápiz"],
                 correctAnswer: 3
             },
             {
-                text: "Completa la palabra con 'b' o 'v': 'La __arca navegó por el río.'",
-                options: ["barca (con b)", "varca (con v)"],
+                text: "5. ¿Qué fruta es amarilla y la comen los monos?",
+                options: ["Plátano", "Manzana", "Sandia", "Uvas"],
                 correctAnswer: 0
             },
             {
-                text: "Completa la palabra con 'b' o 'v': 'El __aso está lleno de agua.'",
+                text: "Completa la palabra con 'b' o 'v': 'El _aso está lleno de agua.'",
                 options: ["baso (con b)", "vaso (con v)"],
                 correctAnswer: 1
             }
